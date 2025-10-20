@@ -1,6 +1,21 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { GITHUB_USERNAME, GITHUB_API_URL } from '$lib/constants';
+import { env } from '$env/dynamic/private';
+
+// Helper to get GitHub headers with optional token
+function getGitHubHeaders() {
+	const headers: Record<string, string> = {
+		'Accept': 'application/vnd.github.v3+json',
+		'User-Agent': 'HavocLab-Showcase'
+	};
+	
+	if (env.GITHUB_TOKEN) {
+		headers['Authorization'] = `Bearer ${env.GITHUB_TOKEN}`;
+	}
+	
+	return headers;
+}
 
 // Function to extract first image from README
 async function getReadmeImage(repoName: string): Promise<string | null> {
@@ -8,10 +23,7 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 		const readmeResponse = await fetch(
 			`${GITHUB_API_URL}/repos/${GITHUB_USERNAME}/${repoName}/readme`,
 			{
-				headers: {
-					'Accept': 'application/vnd.github.v3+json',
-					'User-Agent': 'HavocLab-Showcase'
-				}
+				headers: getGitHubHeaders()
 			}
 		);
 
@@ -70,13 +82,12 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 export const GET: RequestHandler = async () => {
 	try {
 		const response = await fetch(`${GITHUB_API_URL}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`, {
-			headers: {
-				'Accept': 'application/vnd.github.v3+json',
-				'User-Agent': 'HavocLab-Showcase'
-			}
+			headers: getGitHubHeaders()
 		});
 
 		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('GitHub API Error:', response.status, errorText);
 			throw new Error(`GitHub API responded with status: ${response.status}`);
 		}
 
@@ -91,7 +102,7 @@ export const GET: RequestHandler = async () => {
 				const image = await getReadmeImage(repo.name);
 				return {
 					...repo,
-					image: image || repo.owner?.avatar_url || null
+					image: image || null
 				};
 			})
 		);
@@ -99,7 +110,7 @@ export const GET: RequestHandler = async () => {
 		// Add remaining repos without fetching images
 		const remainingRepos = filteredRepos.slice(20).map((repo: any) => ({
 			...repo,
-			image: repo.owner?.avatar_url || null
+			image: null
 		}));
 
 		return json([...reposWithImages, ...remainingRepos]);

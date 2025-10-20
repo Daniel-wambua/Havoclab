@@ -57,6 +57,12 @@ npm install
 # Configure GitHub username
 # Edit src/lib/constants.ts → GITHUB_USERNAME
 
+# (Optional) Add GitHub token to avoid rate limits
+# Copy .env.example to .env and add your token
+cp .env.example .env
+# Get token at: https://github.com/settings/tokens
+# Add to .env: GITHUB_TOKEN=your_token_here
+
 # Run dev server
 npm run dev
 ```
