@@ -20,6 +20,13 @@ HavocLab eliminates manual project updates. Just push to GitHub and your showcas
 
 </details>
 
+<details>
+  <summary>Project Preview</summary>
+
+![HavocLab Screenshot](image.png)
+
+</details>
+
 ---
 
 ## About
