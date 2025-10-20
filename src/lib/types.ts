@@ -9,6 +9,7 @@ export interface Repository {
 	topics: string[];
 	featured?: boolean;
 	icon?: string;
+	image?: string | null;
 }
 
 export interface FeaturedProject {

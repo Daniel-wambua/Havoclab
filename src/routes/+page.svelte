@@ -113,7 +113,7 @@
 					<ProjectCard 
 						{project} 
 						{index} 
-						image={project.featured ? `https://avatars.githubusercontent.com/${GITHUB_USERNAME}` : ''}
+						image={project.image || ''}
 					/>
 				{/each}
 			</div>
