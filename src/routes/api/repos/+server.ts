@@ -69,6 +69,7 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 				   lowerUrl.includes('demo') ||
 				   lowerUrl.includes('preview') ||
 				   lowerUrl.includes('example') ||
+                   lowerUrl.includes('image') ||
 				   lowerUrl.includes('showcase');
 		});
 
