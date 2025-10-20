@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { GITHUB_USERNAME, GITHUB_API_URL } from '$lib/constants';
 import { env } from '$env/dynamic/private';
+import projectImages from '$lib/project-images.json';
 
 // Helper to get GitHub headers with optional token
 function getGitHubHeaders() {
@@ -109,27 +110,30 @@ export const GET: RequestHandler = async () => {
 
 		const repos = await response.json();
 
-		// Filter out forks and archived repos
-		const filteredRepos = repos.filter((repo: any) => !repo.fork && !repo.archived);
+	// Filter out forks and archived repos
+	const filteredRepos = repos.filter((repo: any) => !repo.fork && !repo.archived);
 
-		// Fetch README images for each repo (limit to first 20 to avoid rate limits)
-		const reposWithImages = await Promise.all(
-			filteredRepos.slice(0, 20).map(async (repo: any) => {
-				const image = await getReadmeImage(repo.name);
-				return {
-					...repo,
-					image: image || null
-				};
-			})
-		);
+	// Fetch images for each repo (prioritize manual images)
+	const reposWithImages = await Promise.all(
+		filteredRepos.slice(0, 20).map(async (repo: any) => {
+			// Check if manual image is configured first
+			const manualImage = projectImages[repo.name as keyof typeof projectImages];
+			
+			// If manual image exists, use it; otherwise fetch from README
+			const image = manualImage || await getReadmeImage(repo.name);
+			
+			return {
+				...repo,
+				image: image || null
+			};
+		})
+	);
 
-		// Add remaining repos without fetching images
-		const remainingRepos = filteredRepos.slice(20).map((repo: any) => ({
-			...repo,
-			image: null
-		}));
-
-		return json([...reposWithImages, ...remainingRepos]);
+	// Add remaining repos without fetching images
+	const remainingRepos = filteredRepos.slice(20).map((repo: any) => ({
+		...repo,
+		image: projectImages[repo.name as keyof typeof projectImages] || null
+	}));		return json([...reposWithImages, ...remainingRepos]);
 	} catch (error) {
 		console.error('Error fetching repositories:', error);
 		return json({ error: 'Failed to fetch repositories' }, { status: 500 });
