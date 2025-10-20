@@ -50,16 +50,19 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 		// Filter out unwanted images and prioritize quality screenshots
 		const goodImages = allImages.filter(url => {
 			const lowerUrl = url.toLowerCase();
-			// Skip badges, shields, icons, avatars, and profile pictures
+			// Skip badges, shields, icons, avatars, buttons, and profile pictures
 			return !lowerUrl.includes('shields.io') &&
 				   !lowerUrl.includes('badge') &&
+				   !lowerUrl.includes('button') &&
+				   !lowerUrl.includes('vercel.com/button') &&
+				   !lowerUrl.includes('deploy') &&
 				   !lowerUrl.includes('icon') &&
 				   !lowerUrl.includes('avatar') &&
 				   !lowerUrl.includes('profile') &&
-				   !lowerUrl.includes('github.com/') + GITHUB_USERNAME.toLowerCase() &&
+				   !lowerUrl.includes('logo.svg') &&
+				   !lowerUrl.includes('github.com/' + GITHUB_USERNAME.toLowerCase()) &&
 				   !lowerUrl.includes('githubusercontent.com/' + GITHUB_USERNAME.toLowerCase()) &&
-				   !lowerUrl.endsWith('.svg') && // Skip small vector graphics
-				   !lowerUrl.includes('logo.svg');
+				   !lowerUrl.endsWith('.svg'); // Skip small vector graphics
 		});
 
 		// Prioritize images with certain keywords (screenshots, demo, preview)
@@ -69,7 +72,7 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 				   lowerUrl.includes('demo') ||
 				   lowerUrl.includes('preview') ||
 				   lowerUrl.includes('example') ||
-                   lowerUrl.includes('image') ||
+				   lowerUrl.includes('image.png') ||
 				   lowerUrl.includes('showcase');
 		});
 
