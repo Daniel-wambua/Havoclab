@@ -20,23 +20,48 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 		const readmeData = await readmeResponse.json();
 		const content = atob(readmeData.content);
 
-		// Extract first image from markdown (various formats)
-		const imagePatterns = [
-			/!\[.*?\]\((https?:\/\/[^\)]+)\)/,  // ![alt](url)
-			/<img[^>]+src=["'](https?:\/\/[^"']+)["']/,  // <img src="url">
-			/\[!\[.*?\]\(.*?\)\]\((https?:\/\/[^\)]+)\)/  // [![alt](badge)](url)
-		];
-
-		for (const pattern of imagePatterns) {
-			const match = content.match(pattern);
-			if (match && match[1]) {
-				// Skip badges and shields.io images
-				if (match[1].includes('shields.io') || match[1].includes('badge')) continue;
-				return match[1];
-			}
+		// Extract all images from markdown (various formats)
+		const allImages: string[] = [];
+		
+		// Pattern 1: ![alt](url)
+		const markdownImages = content.matchAll(/!\[.*?\]\((https?:\/\/[^\)]+)\)/g);
+		for (const match of markdownImages) {
+			allImages.push(match[1]);
+		}
+		
+		// Pattern 2: <img src="url">
+		const htmlImages = content.matchAll(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/g);
+		for (const match of htmlImages) {
+			allImages.push(match[1]);
 		}
 
-		return null;
+		// Filter out unwanted images and prioritize quality screenshots
+		const goodImages = allImages.filter(url => {
+			const lowerUrl = url.toLowerCase();
+			// Skip badges, shields, icons, avatars, and profile pictures
+			return !lowerUrl.includes('shields.io') &&
+				   !lowerUrl.includes('badge') &&
+				   !lowerUrl.includes('icon') &&
+				   !lowerUrl.includes('avatar') &&
+				   !lowerUrl.includes('profile') &&
+				   !lowerUrl.includes('github.com/') + GITHUB_USERNAME.toLowerCase() &&
+				   !lowerUrl.includes('githubusercontent.com/' + GITHUB_USERNAME.toLowerCase()) &&
+				   !lowerUrl.endsWith('.svg') && // Skip small vector graphics
+				   !lowerUrl.includes('logo.svg');
+		});
+
+		// Prioritize images with certain keywords (screenshots, demo, preview)
+		const priorityImages = goodImages.filter(url => {
+			const lowerUrl = url.toLowerCase();
+			return lowerUrl.includes('screenshot') ||
+				   lowerUrl.includes('demo') ||
+				   lowerUrl.includes('preview') ||
+				   lowerUrl.includes('example') ||
+				   lowerUrl.includes('showcase');
+		});
+
+		// Return priority image or first good image
+		return priorityImages[0] || goodImages[0] || null;
 	} catch (error) {
 		return null;
 	}
