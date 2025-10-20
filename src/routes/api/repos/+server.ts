@@ -60,8 +60,6 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 				   !lowerUrl.includes('avatar') &&
 				   !lowerUrl.includes('profile') &&
 				   !lowerUrl.includes('logo') &&
-				   !lowerUrl.includes('shopify.com') &&
-				   !lowerUrl.includes('cdn.shopify') &&
 				   !lowerUrl.includes('havoc_logo') &&
 				   !lowerUrl.includes('github.com/' + GITHUB_USERNAME.toLowerCase()) &&
 				   !lowerUrl.includes('githubusercontent.com/' + GITHUB_USERNAME.toLowerCase()) &&
@@ -75,7 +73,7 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 				   lowerUrl.includes('demo') ||
 				   lowerUrl.includes('preview') ||
 				   lowerUrl.includes('example') ||
-				   lowerUrl.includes('image.png') ||
+				   lowerUrl.includes('image') ||
 				   lowerUrl.includes('showcase');
 		});
 
