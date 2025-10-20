@@ -16,7 +16,7 @@ HavocLab eliminates manual project updates. Just push to GitHub and your showcas
   <summary>About the Developer</summary>
 
 > **Professional Background**<br>
-> I'm an experienced, Principal-level full stack engineer with a passion for quality, performance, mentoring, technology and open source. I believe the best judge of a developer is their code, and while I cannot share proprietary work, I have many open source projects on my [GitHub](https://github.com/Daniel-wambua) and showcase my skills at [danielwambua.dev](https://danielwambua.dev).
+> I'm an experienced, Principal-level full stack engineer with a passion for quality, performance, mentoring, technology and open source. I believe the best judge of a developer is their code, and while I cannot share proprietary work, I have many open source projects on my [GitHub](https://github.com/Daniel-wambua) and showcase my skills at [lab.havocsec.me](https://lab.havocsec.me).
 
 </details>
 
