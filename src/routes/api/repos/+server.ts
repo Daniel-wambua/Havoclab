@@ -47,37 +47,48 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 			allImages.push(match[1]);
 		}
 
-		// Filter out unwanted images and prioritize quality screenshots
-		const goodImages = allImages.filter(url => {
-			const lowerUrl = url.toLowerCase();
-			// Skip badges, shields, icons, avatars, buttons, logos, and profile pictures
-			return !lowerUrl.includes('shields.io') &&
-				   !lowerUrl.includes('badge') &&
-				   !lowerUrl.includes('button') &&
-				   !lowerUrl.includes('vercel.com/button') &&
-				   !lowerUrl.includes('deploy') &&
-				   !lowerUrl.includes('icon') &&
-				   !lowerUrl.includes('avatar') &&
-				   !lowerUrl.includes('profile') &&
-				   !lowerUrl.includes('logo') &&
-				   !lowerUrl.includes('havoc_logo') &&
-				   !lowerUrl.includes('github.com/' + GITHUB_USERNAME.toLowerCase()) &&
-				   !lowerUrl.includes('githubusercontent.com/' + GITHUB_USERNAME.toLowerCase()) &&
-				   !lowerUrl.endsWith('.svg'); // Skip small vector graphics
-		});
+	// Filter out unwanted images (badges, buttons, small icons)
+	const goodImages = allImages.filter(url => {
+		const lowerUrl = url.toLowerCase();
+		
+		// Skip obvious non-content images
+		const skipPatterns = [
+			'shields.io',
+			'badge',
+			'vercel.com/button',
+			'netlify.com/img',
+			'.svg',  // Skip SVG icons/badges
+			'avatar',
+			'githubusercontent.com/' + GITHUB_USERNAME.toLowerCase(),
+			'github.com/identicons',
+			'cdn.shopify.com',
+			'havoc_logo'
+		];
+		
+		// Skip if matches any skip pattern
+		return !skipPatterns.some(pattern => lowerUrl.includes(pattern));
+	});
 
-		// Prioritize images with certain keywords (screenshots, demo, preview)
-		const priorityImages = goodImages.filter(url => {
-			const lowerUrl = url.toLowerCase();
-			return lowerUrl.includes('screenshot') ||
-				   lowerUrl.includes('demo') ||
-				   lowerUrl.includes('preview') ||
-				   lowerUrl.includes('example') ||
-				   lowerUrl.includes('image') ||
-				   lowerUrl.includes('showcase');
-		});
-
-		// Return priority image or first good image
+	// Prioritize images with certain keywords (screenshots, demo, preview, project images)
+	const priorityImages = goodImages.filter(url => {
+		const lowerUrl = url.toLowerCase();
+		return lowerUrl.includes('screenshot') ||
+			   lowerUrl.includes('demo') ||
+			   lowerUrl.includes('preview') ||
+			   lowerUrl.includes('example') ||
+			   lowerUrl.includes('image.png') ||
+			   lowerUrl.includes('image.jpg') ||
+			   lowerUrl.includes('image.jpeg') ||
+			   lowerUrl.includes('screenshot.png') ||
+			   lowerUrl.includes('demo.png') ||
+			   lowerUrl.includes('preview.png') ||
+			   lowerUrl.includes('app.png') ||
+			   lowerUrl.includes('project.png') ||
+			   lowerUrl.includes('showcase') ||
+			   lowerUrl.includes('thumbnail') ||
+			   lowerUrl.includes('cover') ||
+			   lowerUrl.match(/\.(png|jpg|jpeg|webp|gif)$/);
+	});		// Return priority image or first good image
 		return priorityImages[0] || goodImages[0] || null;
 	} catch (error) {
 		return null;
