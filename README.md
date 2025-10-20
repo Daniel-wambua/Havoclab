@@ -1,6 +1,6 @@
 <h1 align="center">🧬 HavocLab</h1>
 <p align="center">
-<a href="https://github.com/Daniel-wambua/havoclab"><img src="https://i.ibb.co/7JMXxbF/hydra.png" width="120" /><br /></a>
+<a href="https://github.com/Daniel-wambua/havoclab"><img src="https://cdn.shopify.com/s/files/1/1976/5867/files/Havoc_LOGO-03_medium.png?v=1553743026" width="120" /><br /></a>
 <i>Modern project showcase with glassmorphic design</i>
 <br />
 <i>Auto-fetches GitHub repos with smooth animations</i>
