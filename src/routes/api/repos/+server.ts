@@ -50,7 +50,7 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 		// Filter out unwanted images and prioritize quality screenshots
 		const goodImages = allImages.filter(url => {
 			const lowerUrl = url.toLowerCase();
-			// Skip badges, shields, icons, avatars, buttons, and profile pictures
+			// Skip badges, shields, icons, avatars, buttons, logos, and profile pictures
 			return !lowerUrl.includes('shields.io') &&
 				   !lowerUrl.includes('badge') &&
 				   !lowerUrl.includes('button') &&
@@ -59,7 +59,10 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 				   !lowerUrl.includes('icon') &&
 				   !lowerUrl.includes('avatar') &&
 				   !lowerUrl.includes('profile') &&
-				   !lowerUrl.includes('logo.svg') &&
+				   !lowerUrl.includes('logo') &&
+				   !lowerUrl.includes('shopify.com') &&
+				   !lowerUrl.includes('cdn.shopify') &&
+				   !lowerUrl.includes('havoc_logo') &&
 				   !lowerUrl.includes('github.com/' + GITHUB_USERNAME.toLowerCase()) &&
 				   !lowerUrl.includes('githubusercontent.com/' + GITHUB_USERNAME.toLowerCase()) &&
 				   !lowerUrl.endsWith('.svg'); // Skip small vector graphics
