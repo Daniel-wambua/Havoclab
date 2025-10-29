@@ -35,12 +35,19 @@ HavocLab is a SvelteKit-powered project showcase that automatically displays you
 
 **Core Features:**
 - 🧬 Auto GitHub API integration
-- 🎨 Glassmorphic dark theme (#00AEEF accent)
+- � **Dark/Light mode toggle** with persistent preferences
+- 📊 **GitHub stats display** (stars, forks, last updated)
+- 🔍 **Advanced search & filtering** with real-time updates
+- 📈 **Smart sorting** (stars, forks, updated date, name)
+- 🏷️ **Project tags/categories** with filter chips
+- 📱 **Grid/List view toggle** with different layouts
+- 📊 **Quick stats dashboard** (total projects, stars, forks, languages)
+- �🎨 Glassmorphic dark theme (#00AEEF accent)
 - ⚡ Motion One animations (3.8KB vs 90KB alternatives)
-- 🔍 Real-time search & filter
 - ⭐ Featured projects support
-- 📱 Responsive grid (1→2→3→4 columns)
+- 📱 Fully responsive design
 - 🎯 Smart context-aware icons
+- 📈 **Vercel Analytics & Speed Insights** integration
 
 **Tech Stack:**
 - SvelteKit 2.0 + Svelte 5.0
@@ -99,22 +106,46 @@ npm run dev
 |------|----------|---------|
 | Change GitHub user | `src/lib/constants.ts` | `GITHUB_USERNAME = 'your-username'` |
 | Add featured projects | `src/lib/featured.json` | Add objects with `name`, `description`, `icon` |
+| Add manual project images | `src/lib/project-images.json` | `{"RepoName": "image-url"}` |
 | Customize theme | `tailwind.config.js` | Change `accent` color |
 | Update branding | `src/lib/components/Header.svelte` | Change icon/text |
+| Default sort order | `src/lib/stores/preferences.ts` | Change `sortBy` default |
+| Default view mode | `src/lib/stores/preferences.ts` | Change `viewMode` default |
 
 **Project Structure:**
 ```
 src/
 ├── lib/
-│   ├── components/       # Header, FilterBar, ProjectCard
-│   ├── constants.ts      # GitHub config
-│   ├── types.ts          # TypeScript interfaces
-│   └── featured.json     # Featured projects
+│   ├── components/            # UI components
+│   │   ├── Header.svelte      # Header with search & theme toggle
+│   │   ├── FilterBar.svelte   # Sorting & filtering controls
+│   │   ├── ProjectCard.svelte # Project display card
+│   │   ├── SearchBar.svelte   # Real-time search input
+│   │   ├── StatsDisplay.svelte # Quick stats dashboard
+│   │   ├── ThemeToggle.svelte # Dark/light mode button
+│   │   ├── LoadingState.svelte # Loading spinner
+│   │   └── ErrorState.svelte  # Error display with retry
+│   ├── stores/
+│   │   ├── theme.ts           # Theme state management
+│   │   └── preferences.ts     # User preferences (sort, view, filters)
+│   ├── constants.ts           # GitHub config
+│   ├── types.ts               # TypeScript interfaces
+│   ├── featured.json          # Featured projects
+│   └── project-images.json    # Manual image URLs
 ├── routes/
-│   ├── +page.svelte      # Main showcase
-│   └── api/              # GitHub/Featured endpoints
-└── app.css               # Tailwind + glassmorphism
+│   ├── +layout.svelte         # Analytics integration
+│   ├── +page.svelte           # Main showcase
+│   └── api/                   # GitHub/Featured endpoints
+└── app.css                    # Tailwind + glassmorphism
 ```
+
+**New Features Guide:**
+
+   ```json
+   {
+     "YourRepoName": "https://your-image-url.com/screenshot.png"
+   }
+   ```
 
 ---
 
