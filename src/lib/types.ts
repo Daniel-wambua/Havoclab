@@ -5,7 +5,9 @@ export interface Repository {
 	html_url: string;
 	homepage: string | null;
 	language: string | null;
-	stargazers_count: number;
+	stargazers_count?: number;
+	forks_count?: number;
+	updated_at?: string;
 	topics: string[];
 	featured?: boolean;
 	icon?: string;
@@ -20,4 +22,7 @@ export interface FeaturedProject {
 	homepage?: string;
 	image?: string;
 	icon?: string;
+	stargazers_count?: number;
+	forks_count?: number;
+	updated_at?: string;
 }
