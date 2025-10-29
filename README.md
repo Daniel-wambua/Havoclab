@@ -171,12 +171,6 @@ GitHub API → Fetch Repos → Combine with Featured → Filter/Search → Displ
 
 Contributions welcome! Fork, improve, and submit a PR.
 
-**Ideas for enhancement:**
-- Dark/light mode toggle
-- Sorting options (stars, forks, updated)
-- GitHub stars/forks display
-- Project tags/categories
-- Analytics integration
 
 ---
 
