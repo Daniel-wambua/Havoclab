@@ -167,11 +167,6 @@ GitHub API → Fetch Repos → Combine with Featured → Filter/Search → Displ
 
 ---
 
-## Contributing
-
-Contributions welcome! Fork, improve, and submit a PR.
-
-
 ---
 
 ## License
