@@ -71,11 +71,18 @@ npm install
 # Configure GitHub username
 # Edit src/lib/constants.ts → GITHUB_USERNAME
 
-# (Optional) Add GitHub token to avoid rate limits
-# Copy .env.example to .env and add your token
+# Add GitHub token (REQUIRED for private repos, recommended for rate limits)
 cp .env.example .env
-# Get token at: https://github.com/settings/tokens
-# Add to .env: GITHUB_TOKEN=your_token_here
+# Edit .env and add your token
+
+# To create a GitHub token:
+# 1. Go to: https://github.com/settings/tokens/new
+# 2. Name: "HavocLab Showcase"
+# 3. Expiration: No expiration (or your preference)
+# 4. Scopes:
+#    - Check "repo" (full access) for PRIVATE repos
+#    - OR just "public_repo" for PUBLIC repos only
+# 5. Generate token and copy it to .env
 
 # Run dev server
 npm run dev
@@ -95,6 +102,49 @@ npm run dev
 - **Docker**: `docker build -t havoclab . && docker run -p 3000:3000 havoclab`
 
 </details>
+
+---
+
+## 🔐 Private Repository Access
+
+HavocLab can display **both public AND private repositories** when properly configured.
+
+**Requirements:**
+1. **GitHub Personal Access Token** with `repo` scope
+2. Token must be added to `.env` file or deployment environment variables
+
+**Setup Steps:**
+
+```bash
+# 1. Create a GitHub token
+# Visit: https://github.com/settings/tokens/new
+
+# 2. Configure token settings:
+#    - Note: "HavocLab Showcase"
+#    - Expiration: No expiration (recommended for personal projects)
+#    - Scopes: ✅ repo (Full control of private repositories)
+
+# 3. Generate token and copy it
+
+# 4. Add to your .env file
+echo "GITHUB_TOKEN=your_token_here" > .env
+
+# 5. For Vercel deployment, add to environment variables:
+#    Dashboard → Settings → Environment Variables
+#    Name: GITHUB_TOKEN
+#    Value: your_token_here
+#    Environment: Production, Preview, Development
+```
+
+**How it works:**
+- ✅ **With token**: Fetches from `/user/repos` (includes private repos)
+- ⚠️ **Without token**: Fetches from `/users/{username}/repos` (public only)
+
+**Important Notes:**
+- Private repos will only be visible when the token is present
+- The token must belong to the account that owns the private repositories
+- Rate limits: 60 requests/hour (no token) → 5,000 requests/hour (with token)
+- Never commit your `.env` file to version control (it's in `.gitignore`)
 
 ---
 

@@ -98,7 +98,13 @@ async function getReadmeImage(repoName: string): Promise<string | null> {
 
 export const GET: RequestHandler = async () => {
 	try {
-		const response = await fetch(`${GITHUB_API_URL}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`, {
+		// Use authenticated endpoint to fetch both public and private repos
+		// Falls back to public-only if no token is provided
+		const endpoint = env.GITHUB_TOKEN 
+			? `${GITHUB_API_URL}/user/repos?per_page=100&sort=updated&affiliation=owner` 
+			: `${GITHUB_API_URL}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`;
+		
+		const response = await fetch(endpoint, {
 			headers: getGitHubHeaders()
 		});
 
