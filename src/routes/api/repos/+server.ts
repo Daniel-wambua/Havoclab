@@ -159,6 +159,13 @@ export const GET: RequestHandler = async () => {
 			// Check if manual image is configured first
 			const manualImage = projectImages[repo.name as keyof typeof projectImages];
 			
+			// Debug: Log private repos with manual images
+			if (repo.private && manualImage) {
+				console.log(`⚠️  Private repo "${repo.name}" has manual image: ${manualImage}`);
+				console.log(`   Note: GitHub blob URLs won't work for private repos`);
+				console.log(`   Solution: Upload image to public hosting (imgur, imgbb, etc.)`);
+			}
+			
 			// If manual image exists, use it; otherwise fetch from README
 			const image = manualImage || await getReadmeImage(repo.name);
 			
