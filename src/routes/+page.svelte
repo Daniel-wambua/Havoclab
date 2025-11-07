@@ -201,7 +201,7 @@
 	
 	.hero-section {
 		text-align: center;
-		margin-bottom: 3rem;
+		margin-bottom: 1.5rem;
 	}
 	
 	.hero-title {
